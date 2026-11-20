@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Transacciones Bancarias</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        margin: 0;
+        background: #f4f8ff;
+      }
+      a {
+        color: #1d4ed8;
+      }
+      a:hover {
+        color: #1e3a8a;
+      }
+      .btn {
+        min-height: 44px;
+        padding: 0 20px;
+        border-radius: 10px;
+        font:
+          600 15px Inter,
+          system-ui,
+          sans-serif;
+        cursor: pointer;
+        border: 1.5px solid #1d4ed8;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-sizing: border-box;
+      }
+      .btn-primario {
+        background: #1d4ed8;
+        color: #ffffff;
+      }
+      .btn-primario:hover {
+        background: #1e40af;
+        border-color: #1e40af;
+      }
+      .btn-sec {
+        background: #ffffff;
+        color: #1d4ed8;
+      }
+      .btn-sec:hover {
+        background: #eff6ff;
+      }
+      .btn:focus-visible,
+      textarea:focus-visible {
+        outline: 3px solid #93c5fd;
+        outline-offset: 2px;
+      }
+      .chip {
+        display: inline-flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #bfdbfe;
+      }
+      .tk-fijo {
+        background: #1d4ed8;
+        border-color: #1d4ed8;
+        color: #ffffff;
+      }
+      .tk-fijo .chip-tipo {
+        color: #dbeafe;
+      }
+      .tk-palabra {
+        background: #eff6ff;
+        color: #1e3a8a;
+      }
+      .tk-numero {
+        background: #ffffff;
+        color: #1e3a8a;
+      }
+      .chip-tipo {
+        font:
+          600 11px Inter,
+          system-ui,
+          sans-serif;
+        letter-spacing: 0.06em;
+        color: #1d4ed8;
+      }
+      .chip-lex {
+        font:
+          500 14px "JetBrains Mono",
+          ui-monospace,
+          monospace;
+        white-space: pre;
+      }
+      .fila {
+        display: grid;
+        grid-template-columns: 48px minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+        gap: 12px;
+        padding: 14px 20px;
+        border-top: 1px solid #e2e8f0;
+        align-items: center;
+      }
+      .monto-pos {
+        color: #1d4ed8;
+        font-weight: 600;
+      }
+      .monto-neg {
+        color: #0f172a;
+        font-weight: 600;
+      }
+      textarea {
+        resize: vertical;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      style="
+        min-height: 100vh;
+        font-family: Inter, system-ui, sans-serif;
+        color: #0f172a;
+        background: #f4f8ff;
+      "
+    >
+      <header style="background: #1d4ed8; color: #ffffff; padding: 28px 24px">
+        <div
+          style="
+            max-width: 1120px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 12px;
+          "
+        >
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <span
+              style="
+                font-size: 13px;
+                font-weight: 600;
+                letter-spacing: 0.08em;
+                color: #dbeafe;
+              "
+              >CIPA DEV-OPS</span
+            >
+            <h1 style="margin: 0; font-size: 30px; font-weight: 700">
+              Transacciones Bancarias
+            </h1>
+          </div>
+          <span style="font-size: 15px; color: #dbeafe"
+            >Analizador léxico + intérprete con historia de estado</span
+          >
+        </div>
+      </header>
+
+      <main
+        style="
+          max-width: 1120px;
+          margin: 0 auto;
+          padding: 32px 24px 56px;
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+        "
+      >
+        <form method="post" enctype="multipart/form-data" id="form-principal">
+          <div
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              gap: 24px;
+              align-items: stretch;
+            "
+          >
+            <section
+              style="
+                flex: 999 1 560px;
+                min-width: 0;
+                background: #ffffff;
+                border: 1px solid #dbeafe;
+                border-radius: 16px;
+                padding: 24px;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+              "
+            >
+              <label for="entrada" style="font-size: 17px; font-weight: 600"
+                >Texto de entrada</label
+              >
+              <textarea
+                id="entrada"
+                name="texto"
+                rows="6"
+                spellcheck="false"
+                style="
+                  width: 100%;
+                  box-sizing: border-box;
+                  padding: 14px 16px;
+                  border: 1.5px solid #bfdbfe;
+                  border-radius: 10px;
+                  background: #f8faff;
+                  color: #0f172a;
+                  font-family:
+                    &quot;JetBrains Mono&quot;, ui-monospace, monospace;
+                  font-size: 14px;
+                  line-height: 1.6;
+                "
+              >
+{{ texto }}</textarea
+              >
+              <div style="display: flex; flex-wrap: wrap; gap: 12px">
+                <button
+                  type="submit"
+                  name="accion"
+                  value="procesar"
+                  class="btn btn-primario"
+                >
+                  <svg
+                    aria-hidden="true"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polygon points="6 4 20 12 6 20 6 4"></polygon>
+                  </svg>
+                  Procesar
+                </button>
+                <button
+                  type="submit"
+                  name="accion"
+                  value="ejemplo"
+                  class="btn btn-sec"
+                >
+                  Usar ejemplo del enunciado
+                </button>
+                <label class="btn btn-sec" for="archivo">
+                  <svg
+                    aria-hidden="true"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"
+                    ></path>
+                    <polyline points="14 3 14 9 20 9"></polyline>
+                  </svg>
+                  Abrir archivo .txt
+                </label>
+                <input
+                  id="archivo"
+                  name="archivo"
+                  type="file"
+                  accept=".txt,text/plain"
+                  style="
+                    position: absolute;
+                    width: 1px;
+                    height: 1px;
+                    opacity: 0;
+                  "
+                  onchange="this.form.submit()"
+                />
+                <button
+                  type="submit"
+                  name="accion"
+                  value="limpiar"
+                  class="btn btn-sec"
+                >
+                  Limpiar
+                </button>
+              </div>
+            </section>
+
+            <section
+              style="
+                flex: 1 1 280px;
+                background: #1e3a8a;
+                color: #ffffff;
+                border-radius: 16px;
+                padding: 24px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                gap: 20px;
+              "
+            >
+              <span style="font-size: 15px; font-weight: 600; color: #dbeafe"
+                >Saldo final de la cuenta</span
+              >
+              {% if ok %}
+              <span style="font-size: 52px; font-weight: 700; line-height: 1"
+                >{{ saldo_txt }}</span
+              >
+              {% else %}
+              <span
+                style="
+                  font-size: 40px;
+                  font-weight: 700;
+                  line-height: 1;
+                  color: #bfdbfe;
+                "
+                >{{ saldo_txt }}</span
+              >
+              {% endif %}
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(2, minmax(0, 1fr));
+                  gap: 12px;
+                "
+              >
+                <div
+                  style="
+                    background: #1d4ed8;
+                    border-radius: 10px;
+                    padding: 12px 14px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                  "
+                >
+                  <span style="font-size: 13px; color: #dbeafe">Depósitos</span>
+                  <span style="font-size: 18px; font-weight: 600"
+                    >{{ total_dep }}</span
+                  >
+                </div>
+                <div
+                  style="
+                    background: #1d4ed8;
+                    border-radius: 10px;
+                    padding: 12px 14px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                  "
+                >
+                  <span style="font-size: 13px; color: #dbeafe">Retiros</span>
+                  <span style="font-size: 18px; font-weight: 600"
+                    >{{ total_ret }}</span
+                  >
+                </div>
+              </div>
+            </section>
+          </div>
+        </form>
+
+        {% if hay_error %}
+        <div
+          role="alert"
+          style="
+            background: #ffffff;
+            border: 1.5px solid #1d4ed8;
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+          "
+        >
+          <svg
+            aria-hidden="true"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#1D4ED8"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            style="flex-shrink: 0"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <strong style="font-size: 15px; color: #1e3a8a"
+              >{{ error_titulo }}</strong
+            >
+            <span style="font-size: 15px; color: #334155">{{ error_msg }}</span>
+          </div>
+        </div>
+        {% endif %}
+
+        <section
+          style="
+            background: #ffffff;
+            border: 1px solid #dbeafe;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: baseline;
+              gap: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <h2 style="margin: 0; font-size: 17px; font-weight: 600">
+              1. Tokens identificados
+            </h2>
+            <span style="font-size: 14px; color: #475569"
+              >{{ num_tokens }} tokens</span
+            >
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px">
+            {% for tok in tokens %}
+            <div class="chip {{ tok.clase }}">
+              <span class="chip-tipo">{{ tok.tipo }}</span>
+              <span class="chip-lex">{{ tok.lexema }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </section>
+
+        <section
+          style="
+            background: #ffffff;
+            border: 1px solid #dbeafe;
+            border-radius: 16px;
+            overflow: hidden;
+          "
+        >
+          <div style="padding: 24px 24px 16px">
+            <h2 style="margin: 0; font-size: 17px; font-weight: 600">
+              2. Movimientos procesados
+            </h2>
+          </div>
+          <div style="overflow-x: auto">
+            <div style="min-width: 480px">
+              <div
+                class="fila"
+                style="
+                  background: #eff6ff;
+                  border-top: 1px solid #dbeafe;
+                  font-size: 13px;
+                  font-weight: 600;
+                  color: #1e3a8a;
+                  letter-spacing: 0.04em;
+                "
+              >
+                <span>#</span><span>TIPO</span><span>MONTO</span
+                ><span>SALDO</span>
+              </div>
+              {% for m in movs %}
+              <div class="fila" style="font-size: 15px">
+                <span style="color: #475569">{{ m.n }}</span>
+                <span>{{ m.tipo }}</span>
+                <span
+                  class="{{ m.clase }}"
+                  style="
+                    font-family:
+                      &quot;JetBrains Mono&quot;, ui-monospace, monospace;
+                  "
+                  >{{ m.monto }}</span
+                >
+                <span
+                  style="
+                    font-family:
+                      &quot;JetBrains Mono&quot;, ui-monospace, monospace;
+                  "
+                  >{{ m.saldo }}</span
+                >
+              </div>
+              {% endfor %} {% if sin_movs %}
+              <div
+                style="
+                  padding: 20px;
+                  border-top: 1px solid #e2e8f0;
+                  font-size: 15px;
+                  color: #475569;
+                "
+              >
+                No hay movimientos procesados.
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
